@@ -23,8 +23,9 @@ export default class App extends Component {
   async componentDidMount() {
     let [account] = await getAccounts()
     let contract = await getContract();
+    let balance = await getBalance(account);
 
-    this.setState({ account, contract });
+    this.setState({ account, contract, balance: web3Utils.fromWei(balance.toNumber()) });
   }
 
   getCounter() {
@@ -48,6 +49,8 @@ export default class App extends Component {
           <Text>{this.state.account}</Text>
           <Text>Counter state is:</Text>
           <Text>{this.state.counter}</Text>
+          <Text>Your balance is</Text>
+          <Text>{this.state.balance}</Text>
           { this.state.isLoading && <Text>Loading...</Text> }
           <TouchableOpacity style={styles.button} onPress={this.incrementCounter.bind(this)}>
             <Text>

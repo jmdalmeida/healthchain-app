@@ -1,8 +1,9 @@
 import { abi, address } from './contract';
+import config from '../../config';
 
 const {promisify} = require("es6-promisify");
 const Web3 = require('web3');
-const web3 = new Web3(new Web3.providers.HttpProvider('http://b8b3cac3.ngrok.io'));
+const web3 = new Web3(new Web3.providers.HttpProvider(config.httpProvider));
 
 const getAccounts = promisify(web3.eth.getAccounts);
 
