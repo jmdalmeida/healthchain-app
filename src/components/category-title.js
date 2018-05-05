@@ -9,9 +9,10 @@ import {
 
 export default class CategoryTitle extends Component {
   render() {
+    let { style: customStyles = {} } = this.props;
     return (
-      <View style={styles.container}>
-        <Text style={styles.text}>{this.props.text}</Text>
+      <View style={[styles.container, customStyles.wrapper]}>
+        <Text style={[styles.text, customStyles.text]}>{this.props.text}</Text>
       </View>
     );
   }
