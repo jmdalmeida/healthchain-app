@@ -52,6 +52,8 @@ const styles = StyleSheet.create({
     shadowColor: '#ccc',
     shadowOpacity: 1,
     shadowRadius: 3,
+    bottom: 0,
+    position: 'absolute'
   },
   activeItem: {
     backgroundColor: 'blue'

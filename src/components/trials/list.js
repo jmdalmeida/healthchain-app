@@ -15,7 +15,7 @@ import CategoryTitle from '../category-title';
 let trials = [
   { title: 'Flu', description: 'asdasdsda', photo: 'aa', subtitle: 'sub', id: 1, active: true },
   { title: 'Flu', description: 'asdasdsda', photo: 'aa', subtitle: 'sub', id: 2, active: true },
-  { title: 'Flu', description: 'asdasdsda', photo: 'aa', subtitle: 'sub', id: 3, open: true },
+  { title: 'Flu', description: 'asdasdsda', photo: 'aa', subtitle: 'sub', id: 3 },
   { title: 'Flu', description: 'asdasdsda', photo: 'aa', subtitle: 'sub', id: 4, elegible: true },
   { title: 'Flu', description: 'asdasdsda', photo: 'aa', subtitle: 'sub', id: 5, elegible: true },
   { title: 'Flu', description: 'asdasdsda', photo: 'aa', subtitle: 'sub', id: 6, open: true },
@@ -55,11 +55,11 @@ export default class Trials extends Component {
     return (
       <View style={styles.wrapper}>
         <ScrollView automaticallyAdjustContentInsets={false}>
-          <CategoryTitle text="Active" />
+          <CategoryTitle style={{text: styles.title}} text="On going" />
           { activeTrials.map((trial) => <TrialListItem onPress={this.navigateToItem.bind(this, trial.title)} key={trial.id} {...trial} />) }
-          <CategoryTitle text="Open" />
+          <CategoryTitle style={{text: styles.title}} text="Open" />
           { openTrials.map((trial) => <TrialListItem onPress={this.navigateToItem.bind(this, trial.title)} key={trial.id} {...trial} />) }
-          <CategoryTitle text="Elegibility" />
+          <CategoryTitle style={{text: styles.title}} text="Elegibility" />
           { elegibleTrials.map((trial, index) => <TrialListToggle onValueChange={this.changeItemValue.bind(this, trial)} key={`${trial.id}-${trial-index}`} {...trial} value={trial.elegible} />) }
         </ScrollView>
       </View>
@@ -71,6 +71,10 @@ const styles = StyleSheet.create({
   wrapper: {
     flex: 1,
     paddingTop: 32,
-    paddingHorizontal: 8
+    paddingHorizontal: 8,
+    paddingBottom: 56
+  },
+  title: {
+    paddingVertical: 4
   }
 });

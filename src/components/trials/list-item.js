@@ -10,24 +10,24 @@ import {
 
 export default class TrialListItem extends Component {
   render() {
-    const { title, subtitle, photo, description, onPress = () => {} } = this.props;
+    const { style: customStyles, title, subtitle, photo, description, onPress = () => {} } = this.props;
 
     return (
       <TouchableOpacity style={styles.container} onPress={onPress}>
-        <Photo source={{uri: photo}}/>
+        <Photo source={{uri: photo}} style={customStyles}/>
         <View style={styles.textContainer}>
           <Text style={styles.text}>{title}</Text>
-          <Text style={styles.text}>{subtitle}</Text>
-          <Text style={styles.description}>{description}</Text>
+          {subtitle && <Text style={styles.text}>{subtitle}</Text>}
+          {description && <Text style={styles.description}>{description}</Text>}
         </View>
       </TouchableOpacity>
     );
   }
 }
 
-const Photo = ({ source }) => {
+const Photo = ({ source, style }) => {
   return (
-    <View style={styles.photo}>
+    <View style={[styles.photo, style]}>
       <Image source={source}/>
     </View>
   );
