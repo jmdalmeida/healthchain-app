@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { NavigatorIOS, AppRegistry } from 'react-native';
-import Profile from './src/components/profile'
+import Profile from './src/components/profile';
+import Trials from './src/components/trials/list';
 
 export default class mobile extends Component {
   render() {
@@ -8,10 +9,10 @@ export default class mobile extends Component {
       <NavigatorIOS
         ref='nav'
         initialRoute={{
-          component: Profile,
-          title: 'test'
+          component: Trials,
+          title: 'Trials'
         }}
-        style={{flex: 1}}
+        style={{flex: 1, backgroundColor: 'red'}}
       />
     );
   }}
