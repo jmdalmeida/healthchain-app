@@ -2,15 +2,15 @@ import React, { Component } from 'react';
 import {
   StyleSheet,
   Text,
-  TouchableOpacity,
   View,
-  NavigatorIOS,
   Image,
-  Button
+  TouchableOpacity,
+  TextInput,
+  Modal
 } from 'react-native';
 
 export default class Profile extends Component {
-  state={
+  state = {
     basicInfo: {
       name: 'Daniel Francisco',
       age: 24,
@@ -18,38 +18,53 @@ export default class Profile extends Component {
       gender: 'Male'
     },
     stats: [
-      { type: 'nationality', value: 'Portugal', uri: require(`../assets/nationality.png`)},
-      { type: 'height', value: '1,68m', uri: require(`../assets/height.png`)},
-      { type: 'blood-type', value: 'A+', uri: require(`../assets/blood-type.png`)},
-      { type: 'weight', value: '70 Kg', uri: require(`../assets/weight.png`)},
+      { type: 'location', value: 'Portugal', uri: require(`../assets/location.png`), toUpdate: true },
+      { type: 'height', value: '1,68 m', uri: require(`../assets/height.png`), toUpdate: true },
+      { type: 'weight', value: '70 Kg', uri: require(`../assets/weight.png`), toUpdate: true },
+      { type: 'blood-type', value: 'A+', uri: require(`../assets/blood-type.png`), toUpdate: false }
     ]
-  }
+  };
 
   render() {
     return (
       <View style={styles.wrapper}>
         <View style={styles.basicInfoWrapper}>
-          <Image
-            style={styles.basicInfoProfilePhoto}
-            source={{uri: this.state.basicInfo.profilePhoto}}
-          />
-          <View style={{marginLeft: 20}}>
-            <Text style={styles.basicInfoText}>{this.state.basicInfo.name}</Text>
-            <Text style={styles.basicInfoText}>{this.state.basicInfo.age}, {this.state.basicInfo.gender}</Text>
+          <View style={styles.basicInfoProfilePhoto}>
+            <Image style={{ width: 120, height: 120 }} source={{ uri: this.state.basicInfo.profilePhoto }} />
+          </View>
+          <View style={{ marginLeft: 20 }}>
+            <Text style={styles.basicInfoTitle}>{this.state.basicInfo.name}</Text>
+            <Text style={styles.basicInfoSubtitle}>{`${this.state.basicInfo.age} years old`}</Text>
+            <Text style={styles.basicInfoSubtitle}>{this.state.basicInfo.gender}</Text>
           </View>
         </View>
-        
-        {this.state.stats.map((stat) => <Stat key={stat.type} {...stat}></Stat>)}
+        <View style={styles.statsWrapper}>
+          {this.state.stats.map((stat) => <Stat value={this.state} key={stat.type} {...stat}></Stat>)}
+        </View>
       </View>
     );
   }
 }
 
-const Stat = ({ type, value, uri }) => {
+const UpdateButton = () => {
   return (
-    <View style={styles.statsWrapper}>
-      <Image style={{height: 40, width: 40}} source={ uri }/>
-      <Text style={styles.detail}>{type}, {value}</Text>
+    <View style={styles.updateButtonWrapper}>
+      <TouchableOpacity style={styles.updateButton} onPress={() => {}}>
+        <Text style={styles.updateButtonText}>Update</Text>
+      </TouchableOpacity>
+    </View>
+  )
+}
+
+const Stat = ({ type, value, uri, toUpdate }) => {
+  return (
+    <View style={styles.statWrapper}>
+      <Image style={styles.statIcon} source={uri} />
+      <View>
+        <Text style={styles.statsTitle}>{type.toUpperCase()}</Text>
+        <Text style={styles.statsSubtitle}>{value}</Text>
+      </View>
+      {toUpdate && <UpdateButton/>}
     </View>
   )
 }
@@ -60,28 +75,68 @@ const styles = StyleSheet.create({
     alignItems: 'flex-start',
     flexWrap: 'wrap',
     flexDirection: 'row',
-    margin: 10
+    backgroundColor: '#5856d6',
+    padding: 20
   },
-  basicInfoText: {
-    fontSize: 20,
-    margin: 10,
-    fontWeight: 'bold'
+  basicInfoTitle: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    marginBottom: 10,
+    marginTop: 10,
+    color: 'white'
+  },
+  basicInfoSubtitle: {
+    fontSize: 15,
+    marginBottom: 5,
+    color: 'white'
   },
   basicInfoProfilePhoto: {
-    width: 100,
-    height: 100,
-    borderRadius: 50
+    width: 120,
+    height: 120,
+    borderRadius: 100,
+    overflow: 'hidden'
   },
 
   // Stats
   statsWrapper: {
-    flexWrap: 'wrap',
-    flexDirection: 'row',
-    margin: 10,
-    backgroundColor: 'red'
+    margin: 20
   },
-  statsText: {
-    margin: 10
+  statWrapper: {
+    flexDirection: 'row',
+    alignItems: 'center'
+  },
+  statsTitle: {
+    fontSize: 10,
+    color: '#4a4a4a'
+  },
+  statsSubtitle: {
+    fontSize: 15,
+    color: '#4a4a4a',
+    fontWeight: 'bold'
+  },
+  statIcon: {
+    height: 30,
+    width: 30,
+    margin: 15
+  },
+
+  // Update Button
+  updateButtonWrapper: {
+    justifyContent: 'flex-end',
+    flex: 1,
+    flexDirection: 'row'
+  },
+  updateButton: {
+    justifyContent: 'center',
+    backgroundColor: '#5856d6',
+    alignItems: 'center',
+    borderRadius: 20,
+    height: 30,
+    width: 80
+  },
+  updateButtonText: {
+    textAlign: 'center',
+    color: 'white'
   },
 
   // Global
