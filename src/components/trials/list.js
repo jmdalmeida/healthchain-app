@@ -70,9 +70,9 @@ export default class Trials extends Component {
 const styles = StyleSheet.create({
   wrapper: {
     flex: 1,
-    paddingTop: 32,
     paddingHorizontal: 8,
-    paddingBottom: 56
+    paddingBottom: 56,
+    marginTop: 32
   },
   title: {
     paddingVertical: 4

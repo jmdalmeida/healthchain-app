@@ -92,7 +92,6 @@ const DayInHistory = ({ history, date, onPress }) => {
 
 const styles = StyleSheet.create({
   wrapper: {
-    marginTop: 64,
     flexGrow: 1,
     margin: 5,
     paddingBottom: 56

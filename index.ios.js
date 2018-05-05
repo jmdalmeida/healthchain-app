@@ -21,21 +21,21 @@ export default class mobile extends Component {
   }
 
   onPress(route) {
-    this.refs.nav.replace(route);
     this.setState({ activeRoute: route.route })
+  }
+
+  renderRoute() {
+    let Route = BottomBarItems.filter((item) => {
+      return item.route === this.state.activeRoute;
+    })[0];
+
+    return <Route.component navigator={{ push: () => {}, replace: () => {} }} />
   }
 
   render() {
     return (
       <View style={{flex: 1}}>
-        <NavigatorIOS
-          ref='nav'
-          initialRoute={{
-            component: Trials,
-            title: 'Trials'
-          }}
-          style={{flex: 1}}
-        />
+        {this.renderRoute(this.state.activeState)}
         <BottomBar items={BottomBarItems} activeItem={this.state.activeRoute} onItemPress={this.onPress.bind(this)}/>
       </View>
     );

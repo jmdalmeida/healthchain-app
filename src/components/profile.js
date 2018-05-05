@@ -141,7 +141,7 @@ const styles = StyleSheet.create({
 
   // Global
   wrapper: {
-    marginTop: 64,
+    marginTop: 32,
     flexGrow: 1,
     margin: 5
   }

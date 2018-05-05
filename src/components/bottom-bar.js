@@ -50,10 +50,11 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     width: '100%',
     shadowColor: '#ccc',
-    shadowOpacity: 1,
-    shadowRadius: 3,
+    shadowOpacity: 0.4,
+    shadowRadius: 2,
     bottom: 0,
-    position: 'absolute'
+    position: 'absolute',
+    justifyContent: 'space-between'
   },
   activeItem: {
     backgroundColor: 'blue'
