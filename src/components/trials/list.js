@@ -4,19 +4,26 @@ import {
   Text,
   TouchableOpacity,
   View,
-  NavigatorIOS
+  ScrollView,
+  NavigatorIOS,
 } from 'react-native';
 import TrialListItem from './list-item';
+import TrialListToggle from './list-toggle';
 import TrialDetail from './detail';
+import CategoryTitle from '../category-title';
+
+let trials = [
+  { title: 'Flu', description: 'asdasdsda', photo: 'aa', subtitle: 'sub', id: 1, active: true },
+  { title: 'Flu', description: 'asdasdsda', photo: 'aa', subtitle: 'sub', id: 2, active: true },
+  { title: 'Flu', description: 'asdasdsda', photo: 'aa', subtitle: 'sub', id: 3, open: true },
+  { title: 'Flu', description: 'asdasdsda', photo: 'aa', subtitle: 'sub', id: 4, elegible: true },
+  { title: 'Flu', description: 'asdasdsda', photo: 'aa', subtitle: 'sub', id: 5, elegible: true },
+  { title: 'Flu', description: 'asdasdsda', photo: 'aa', subtitle: 'sub', id: 6, open: true },
+]
 
 export default class Trials extends Component {
   state = {
-    trials: [
-      { title: 'Flu', photo: 'aa', subtitle: 'sub', id: 1 },
-      { title: 'Cancer', photo: 'aa', subtitle: 'sub', id: 2 },
-      { title: 'Leuchemia', photo: 'aa', subtitle: 'sub', id: 3 },
-      { title: 'Sarampus', photo: 'aa', subtitle: 'sub', id: 4 },
-    ]
+    trials
   }
 
   navigateToItem(title) {
@@ -26,10 +33,35 @@ export default class Trials extends Component {
     })
   }
 
+  changeItemValue(updatedTrial) {
+    updatedTrial.elegible = !updatedTrial.elegible;
+
+    let trials = this.state.trials.reduce((acc, trial) => {
+      if (trial.id === updatedTrial.id) {
+        trial = updatedTrial; 
+      }
+        
+      return acc.concat(trial);
+    }, []);
+
+    this.setState({ trials });
+  }
+
   render() {
+    let activeTrials = this.state.trials.filter(trial => trial.active);
+    let openTrials = this.state.trials.filter(trial => trial.open);
+    let elegibleTrials = this.state.trials;
+
     return (
       <View style={styles.wrapper}>
-        { this.state.trials.map((trial) => <TrialListItem onPress={this.navigateToItem.bind(this, trial.title)} key={trial.id} {...trial} />) }
+        <ScrollView automaticallyAdjustContentInsets={false}>
+          <CategoryTitle text="Active" />
+          { activeTrials.map((trial) => <TrialListItem onPress={this.navigateToItem.bind(this, trial.title)} key={trial.id} {...trial} />) }
+          <CategoryTitle text="Open" />
+          { openTrials.map((trial) => <TrialListItem onPress={this.navigateToItem.bind(this, trial.title)} key={trial.id} {...trial} />) }
+          <CategoryTitle text="Elegibility" />
+          { elegibleTrials.map((trial, index) => <TrialListToggle onValueChange={this.changeItemValue.bind(this, trial)} key={`${trial.id}-${trial-index}`} {...trial} value={trial.elegible} />) }
+        </ScrollView>
       </View>
     );
   }
@@ -37,8 +69,8 @@ export default class Trials extends Component {
 
 const styles = StyleSheet.create({
   wrapper: {
-    marginTop: 64,
-    flexGrow: 1,
-    padding: 8
+    flex: 1,
+    paddingTop: 32,
+    paddingHorizontal: 8
   }
 });

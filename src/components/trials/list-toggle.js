@@ -5,16 +5,17 @@ import {
   TouchableOpacity,
   View,
   Image,
-  NavigatorIOS,
+  Switch,
+  NavigatorIOS
 } from 'react-native';
 
 export default class TrialListItem extends Component {
   render() {
-    const { title, subtitle, photo, description, onPress = () => {} } = this.props;
+    const { title, subtitle, photo, description, onValueChange, onPress = () => {} } = this.props;
 
     return (
-      <TouchableOpacity style={styles.container} onPress={onPress}>
-        <Photo source={{uri: photo}}/>
+      <TouchableOpacity style={styles.container} onPress={onValueChange}>
+        <Switch value={this.props.value} onValueChange={onValueChange} />
         <View style={styles.textContainer}>
           <Text style={styles.text}>{title}</Text>
           <Text style={styles.text}>{subtitle}</Text>
