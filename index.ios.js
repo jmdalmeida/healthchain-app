@@ -1,23 +1,19 @@
 import React, { Component } from 'react';
-import {
-  AppRegistry,
-  StyleSheet,
-  StatusBar,
-  Text,
-  TouchableOpacity,
-  View
-} from 'react-native';
-import App from './src/App';
+import { NavigatorIOS, AppRegistry } from 'react-native';
+import Profile from './src/components/profile'
 
 export default class mobile extends Component {
-  render () {
+  render() {
     return (
-      <View>
-        <StatusBar barStyle="dark-content" />
-        <App />
-      </View>
+      <NavigatorIOS
+        ref='nav'
+        initialRoute={{
+          component: Profile,
+          title: 'test'
+        }}
+        style={{flex: 1}}
+      />
     );
-  }
-}
+  }}
 
 AppRegistry.registerComponent('mobile', () => mobile);
