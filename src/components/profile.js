@@ -14,15 +14,16 @@ import Stat from './stat';
 export default class Profile extends Component {
   state = {
     basicInfo: {
-      name: 'Daniel Francisco',
+      name: 'Dalai Sarda',
       age: 24,
-      profilePhoto: 'https://scontent-mad1-1.xx.fbcdn.net/v/t1.0-9/21728240_1655863894423805_1719636342345520942_n.jpg?_nc_cat=0&oh=57c828f59b2ded8504e17201461146b9&oe=5B91FFB1',
-      gender: 'Male'
+      profilePhoto: require('../assets/sinatra.jpg'),
+      gender: 'Male',
+      nationality: 'Portuguese'
     },
     stats: [
       { type: 'height', value: '1,68 m', uri: require(`../assets/height.png`), showButton: true, Button: UpdateButton },
       { type: 'weight', value: '70 Kg', uri: require(`../assets/weight.png`), showButton: true, Button: UpdateButton },
-      { type: 'blood-type', value: 'A+', uri: require(`../assets/blood-type.png`), showButton: false },
+      { type: 'blood-group', value: 'A+', uri: require(`../assets/blood-group.png`), showButton: false },
       { type: 'location', value: 'Portugal', uri: require(`../assets/location.png`), showButton: true, Button: UpdateButton }
     ]
   };
@@ -33,12 +34,13 @@ export default class Profile extends Component {
         <Header text="Profile" color="#5856d6" />
         <View style={styles.basicInfoWrapper}>
           <View style={styles.basicInfoProfilePhoto}>
-            <Image style={{ width: 120, height: 120 }} source={{ uri: this.state.basicInfo.profilePhoto }} />
+            <Image style={{ width: 120, height: 120 }} source={ this.state.basicInfo.profilePhoto } />
           </View>
           <View style={{ marginLeft: 20 }}>
             <Text style={styles.basicInfoTitle}>{this.state.basicInfo.name}</Text>
             <Text style={styles.basicInfoSubtitle}>{`${this.state.basicInfo.age} years old`}</Text>
             <Text style={styles.basicInfoSubtitle}>{this.state.basicInfo.gender}</Text>
+            <Text style={styles.basicInfoSubtitle}>{this.state.basicInfo.nationality}</Text>
           </View>
         </View>
         <View style={styles.statsWrapper}>
@@ -46,7 +48,7 @@ export default class Profile extends Component {
         </View>
       </View>
     );
-  }
+  };
 }
 
 const UpdateButton = () => {
@@ -84,6 +86,8 @@ const styles = StyleSheet.create({
   basicInfoProfilePhoto: {
     width: 120,
     height: 120,
+    borderColor: 'white',
+    borderWidth: 3,
     borderRadius: 100,
     overflow: 'hidden',
     borderWidth: 2,
@@ -112,7 +116,8 @@ const styles = StyleSheet.create({
   statIcon: {
     height: 30,
     width: 30,
-    margin: 15
+    margin: 15,
+    resizeMode: 'contain'
   },
 
   // Update Button

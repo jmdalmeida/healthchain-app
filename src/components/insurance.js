@@ -11,7 +11,6 @@ import {
 import Header from './header';
 import Stat from './stat';
 import CategoryTitle from './category-title';
-import TrialListItem from './trials/list-item';
 
 export default class Insurance extends Component {
   state = {
@@ -22,10 +21,10 @@ export default class Insurance extends Component {
       currentPlan: 'A'
     },
     plans: [
-      { type: 'Insurance company B', letter: 'B', value: '52.35€', uri: require(`../assets/height.png`), showButton: true, Button: ChangeButton },
-      { type: 'Insurance company C', letter: 'C', value: '53.75€', uri: require(`../assets/weight.png`), showButton: true, Button: ChangeButton },
-      { type: 'Insurance company D', letter: 'D', value: '56.33€', uri: require(`../assets/blood-type.png`), toUpdate: false },
-      { type: 'Insurance company Z', letter: 'Z', isOther: true, value: '61.99€', uri: require(`../assets/location.png`), showButton: true, Button: ChangeButton }
+      { type: 'Insurance company B', letter: 'B', value: '52.35€', showButton: true, Button: ChangeButton },
+      { type: 'Insurance company C', letter: 'C', value: '53.75€', showButton: true, Button: ChangeButton },
+      { type: 'Insurance company D', letter: 'D', value: '56.33€', toUpdate: false },
+      { type: 'Insurance company Z', letter: 'Z', isOther: true, value: '61.99€', showButton: true, Button: ChangeButton }
     ]
   }
   render() {

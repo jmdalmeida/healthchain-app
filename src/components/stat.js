@@ -35,9 +35,10 @@ const styles = StyleSheet.create({
     fontWeight: 'bold'
   },
   statIcon: {
-    height: 30,
-    width: 30,
-    margin: 15
+    height: 32,
+    width: 32,
+    margin: 15,
+    resizeMode: 'contain'
   },
 })
 
