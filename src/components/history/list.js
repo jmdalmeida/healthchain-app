@@ -7,21 +7,24 @@ import {
   NavigatorIOS,
   ScrollView
 } from 'react-native';
+import moment from 'moment';
 import CategoryTitle from '../category-title';
 import TrialListItem from '../trials/list-item';
 import HistoryDetail from './detail';
-import moment from 'moment';
+import Header from '../header';
+
+const MedicalPrescriptionIcon = require('../../assets/medical-prescription.png');
+const MedicalAppointmentIcon = require('../../assets/medical-appointment.png');
+const VaccinationIcon = require('../../assets/medical-vaccination.png');
 
 export default class History extends Component {
   state = {
     history: [
-      { title: 'Flu', type: 'medical', subtitle: 'asdasdsda', date: new Date(2018, 2, 10) },
-      { title: 'Flu', type: 'wearable', subtitle: 'asdasdsda', date: new Date(2018, 2, 10) },
-      { title: 'Flu', type: 'medical', subtitle: 'asdasdsda', date: new Date(2018, 2, 8) },
-      { title: 'Flu', type: 'wearable', subtitle: 'asdasdsda', date: new Date(2018, 1, 1) },
-      { title: 'Flu', type: 'wearable', subtitle: 'asdasdsda', date: new Date(2018, 2, 21) },
-      { title: 'Flu', type: 'medical', subtitle: 'asdasdsda', date: new Date(2018, 2, 21) },
-      { title: 'Flu', type: 'wearable', subtitle: 'yo', description: 'asdasdsda', date: new Date(2018, 3, 7) },
+      { label: 'Medical prescription', icon: MedicalPrescriptionIcon, subtitle: 'Cough syrup', date: new Date(2018, 4, 5) },
+      { label: 'Medical appointment', icon: MedicalPrescriptionIcon, subtitle: 'General medical examination', date: new Date(2018, 4, 5) },
+      { label: 'Vacination', icon: VaccinationIcon, subtitle: 'Flu shot', date: new Date(2018, 3, 29) },
+      { label: 'Medical appointment', icon: MedicalAppointmentIcon, subtitle: 'General medical examination', date: new Date(2018, 3, 29) },
+      { label: 'Vacination', icon: VaccinationIcon, subtitle: 'Flu shot', date: new Date(2018, 3, 12) },
     ]
   }
 
@@ -46,19 +49,21 @@ export default class History extends Component {
     console.log(...arguments)
     this.props.navigator.push({
       title,
-      component: HistoryDetail
+      component: HistoryDetail,
+      route: 'history-detail'
     })
   }
 
   render() {
-    let orderedHistory = this.state.history.sort((day1, day2) => day1.date > day2.date)
+    let orderedHistory = this.state.history.sort((day1, day2) => day1.date < day2.date)
 
     let historyByDate = this.getHistoryByDate(orderedHistory);
     let days = Object.keys(historyByDate);
 
     return (
       <View style={styles.wrapper}>
-        <ScrollView automaticallyAdjustContentInsets={false}>
+        <Header text="History" color="#007aff" />
+        <ScrollView style={styles.scrollView} contentInset={{bottom: 150}}>
           {
             days.map((day, index) => {
               return (
@@ -72,15 +77,14 @@ export default class History extends Component {
   }
 }
 
-const DayInHistory = ({ history, date, onPress }) => {
+const DayInHistory = ({ history, date, onPress, style = {} }) => {
   let formattedDay = moment(parseInt(date, 10)).format('Do MMM');
 
   return (
     <View>
-      <CategoryTitle text={formattedDay} style={{ text: styles.date }}/>
+      <CategoryTitle text={formattedDay} />
       {
         history.map((historyItem, index) => {
-          let style = historyItem.type === 'medical' ? styles.medical : styles.wearable;
           return (
             <TrialListItem onPress={() => onPress(historyItem)} key={`${index}`} style={style} {...historyItem} />
           )
@@ -92,20 +96,11 @@ const DayInHistory = ({ history, date, onPress }) => {
 
 const styles = StyleSheet.create({
   wrapper: {
-    marginTop: 64,
     flexGrow: 1,
-    margin: 5,
-    paddingBottom: 56
+    paddingBottom: 56,
   },
-  medical: {
-    backgroundColor: 'green'
-  },
-  wearable: {
-    backgroundColor: 'blue'
-  },
-  date: {
-    textAlign: 'center',
-    width: '100%',
-    fontSize: 16
+  scrollView: {
+    paddingHorizontal: 20,
+    paddingTop: 16,
   }
 });
