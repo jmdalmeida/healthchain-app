@@ -9,7 +9,7 @@ import {
 } from 'react-native';
 import moment from 'moment';
 import CategoryTitle from '../category-title';
-import TrialListItem from '../trials/list-item';
+import TrialListItem from '../research/list-item';
 import HistoryDetail from './detail';
 import Header from '../header';
 

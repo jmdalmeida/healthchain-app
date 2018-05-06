@@ -14,7 +14,7 @@ export default class BottomBar extends Component {
   }
 
   render() {
-    const { title, photo = 'asdsa', activeItem } = this.props;
+    const { activeItem } = this.props;
 
     return (
       <View style={styles.container}>
@@ -33,53 +33,54 @@ export default class BottomBar extends Component {
   }
 }
 
-const BottomBarItem = ({ isActive, icon, title, onPress }) => {
+const BottomBarItem = ({ isActive, icons, title, onPress, color }) => {
   return (
     <TouchableOpacity style={[styles.item, isActive ? styles.activeItem : {}]} onPress={onPress}>
-      <Image source={icon} style={styles.iconImage}/>
-      <Text style={styles.text}>{title}</Text>
+      <Image source={isActive ? icons.active : icons.default } style={styles.iconImage}/>
+      <Text style={[styles.text, isActive ? { color } : {}]}>{title}</Text>
     </TouchableOpacity>
   )
 }
 
 const styles = StyleSheet.create({
   container: {
-    height: 56,
-    borderColor: '#ccc',
+    height: 90,
     marginBottom: 8,
     flexDirection: 'row',
     width: '100%',
-    shadowColor: '#ccc',
-    shadowOpacity: 0.4,
-    shadowRadius: 2,
     bottom: 0,
     position: 'absolute',
-    justifyContent: 'space-between'
+    backgroundColor: 'transparent'
   },
   activeItem: {
-    backgroundColor: 'blue'
+    height: 90,
+    shadowColor: '#ccc',
+    shadowOpacity: 1,
+    shadowRadius: 3,
+    zIndex: 2
   },
   iconImage: {
-    height: 16,
-    width: 16
+    height: 32,
+    width: 32
   },
   item: {
-    width: '33%',
+    width: '25%',
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
+    height: 82,
+    borderTopWidth: 1,
+    borderTopColor: '#ccc',
+    backgroundColor: 'white',
+    alignSelf: 'flex-end'
   },
   textContainer: {
     width: '50%',
     marginLeft: 8
   },
-  photo: {
-    borderRadius: 100,
-    height: 32,
-    width: 32,
-  },
   text: {
     backgroundColor: 'transparent',
-    marginTop: 4
+    marginTop: 4,
+    fontSize: 14
   }
 });
 
