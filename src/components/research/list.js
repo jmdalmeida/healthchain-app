@@ -12,21 +12,67 @@ import TrialListToggle from './list-toggle';
 import TrialDetail from './detail';
 import CategoryTitle from '../category-title';
 import Header from '../header';
+const {promisify} = require("es6-promisify");
+
+import { registry, trial } from '../../util/contract';
+import { web3, getTrial, getRegistry, getAccounts } from '../../util/ethereum';
 
 const MedicalPrescriptionIcon = require('../../assets/medical-prescription.png');
 const MedicalAppointmentIcon = require('../../assets/medical-appointment.png');
 const VaccinationIcon = require('../../assets/medical-vaccination.png');
 
-let trials = [
-  { label: 'medical trial', icon: MedicalPrescriptionIcon, subtitle: 'New flu shot', id: 1, active: true },
-  { label: 'medical trial', icon: VaccinationIcon, subtitle: 'Hepatitis A new treatment', id: 2, open: true },
-  { label: 'Flu', photo: 'aa', subtitle: 'sub', id: 4, elegible: true },
-  { label: 'Flu', photo: 'aa', subtitle: 'sub', id: 5, elegible: true },
-]
-
 export default class Trials extends Component {
   state = {
-    trials
+    trials: [],
+    myTrials: []
+  }
+
+  async componentDidMount() {
+    let [account] = await getAccounts();
+    let contract = await getRegistry();
+    let trialsCount = await contract.getTrialsCount((_, count) => {
+      this.setState({ trialsCount: count.toNumber() }, () => this.getTrials());
+    });
+
+    this.setState({ contract, account });
+  }
+
+  async getTrials() {
+    let { trialsCount, contract, myTrials, account } = this.state;
+
+    for (let i = 0; i < trialsCount; i++) {
+      contract.getTrial(i, (_, address) => {
+        let contract = getTrial(address)
+        this.setState(
+          { myTrials: myTrials.concat(contract) }, 
+          () => this.formatContracts(i)
+        )
+      })
+    }
+  }
+
+  async formatContracts(index) {   
+    let trials = this.state.myTrials.map(async (contract) => {
+      let isOngoingPromised = promisify(contract.isOngoing)
+      let getNamePromised = promisify(contract.getName)
+      let getDescriptionPromised = promisify(contract.getDescription)
+
+      return Promise.all([isOngoingPromised(), getNamePromised(), getDescriptionPromised(), Promise.resolve(index)])
+    });
+
+    
+    let allTrials = await trials;
+    let trialsData = allTrials.map(async (singleTrial) => {
+      let [isOngoing, label, description, id] = await singleTrial;
+
+      return { open: isOngoing, label, description, id };
+    });
+
+    Promise.all(trialsData)
+      .then((trials) => {
+        let onGoingTrials = trials.filter(trial => trial.open);
+        this.setState({ trials: this.state.trials.concat(onGoingTrials) })
+      })
   }
 
   navigateToItem(title) {

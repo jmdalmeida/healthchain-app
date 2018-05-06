@@ -1,4 +1,4 @@
-import { abi, address } from './contract';
+import { registry, trial } from './contract';
 import config from '../../config';
 
 const {promisify} = require("es6-promisify");
@@ -7,25 +7,23 @@ const web3 = new Web3(new Web3.providers.HttpProvider(config.httpProvider));
 
 const getAccounts = promisify(web3.eth.getAccounts);
 
-const getBalance = function(account) {
-  return new Promise((res, rej) => {
-    web3.eth.getBalance(account, (err, balance) => {
-      if (err) {
-        return rej(err);
-      }
-
-      res(balance);
-    })
-  });
-}
-
 const isConnected = () => web3.isConnected();
 
-const getContract = () => {
-  let contractAbi = web3.eth.contract(abi);
+const getRegistry = () => {
+  let contractAbi = web3.eth.contract(registry.abi);
+
+  return contractAbi.at(registry.address);
+}
+
+const getTrial = (address) => {
+  let contractAbi = web3.eth.contract(trial.abi);
 
   return contractAbi.at(address);
 }
 
+const getTrialsCount = (account) => {
 
-export { getContract, getBalance, getAccounts, isConnected };
+}
+
+
+export { web3, getTrial, getRegistry, getAccounts, isConnected };
