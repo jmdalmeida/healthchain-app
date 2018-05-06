@@ -1,5 +1,5 @@
 export const registry = {
-  address: '0x63f94e5e538d97cd60f3cc8c7e80e31f19b31f68',
+  address: '0x0e54e8df39e9387c30e526a8dd39b8a1aa131202',
   abi: [
       {
           "constant": false,

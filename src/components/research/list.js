@@ -3,6 +3,7 @@ import {
   StyleSheet,
   Text,
   TouchableOpacity,
+  ActivityIndicator,
   View,
   ScrollView,
   NavigatorIOS,
@@ -24,7 +25,27 @@ const VaccinationIcon = require('../../assets/medical-vaccination.png');
 export default class Trials extends Component {
   state = {
     trials: [],
-    myTrials: []
+    myTrials: [],
+    isLoading: true,
+    elegibleTrials: [
+      {
+        open: false,
+        description: 'Asthma',
+        id: 10,
+        elegible: true
+      },
+      {
+        open: false,
+        description: 'Common cold',
+        id: 11
+      },
+      {
+        open: false,
+        description: 'Diabetes',
+        id: 12,
+        elegible: true
+      }
+    ]
   }
 
   async componentDidMount() {
@@ -39,6 +60,7 @@ export default class Trials extends Component {
 
   async getTrials() {
     let { trialsCount, contract, myTrials, account } = this.state;
+    this.setState({ isLoading: true });
 
     for (let i = 0; i < trialsCount; i++) {
       contract.getTrial(i, (_, address) => {
@@ -71,16 +93,16 @@ export default class Trials extends Component {
     Promise.all(trialsData)
       .then((trials) => {
         let onGoingTrials = trials.filter(trial => trial.open);
-        this.setState({ trials: this.state.trials.concat(onGoingTrials) })
+        this.setState({ isLoading: false, trials: this.state.trials.concat(onGoingTrials) })
       })
   }
 
   navigateToItem(title) {
-    this.props.navigator.push({
-      title,
-      component: TrialDetail,
-      route: 'trial-detail'
-    })
+    // this.props.navigator.push({
+    //   title,
+    //   component: TrialDetail,
+    //   route: 'trial-detail'
+    // })
   }
 
   changeItemValue(updatedTrial) {
@@ -98,20 +120,25 @@ export default class Trials extends Component {
   }
 
   render() {
+    let { isLoading } = this.state;
     let activeTrials = this.state.trials.filter(trial => trial.active);
     let openTrials = this.state.trials.filter(trial => trial.open);
-    let elegibleTrials = this.state.trials;
+    let elegibleTrials = this.state.elegibleTrials;
 
     return (
       <View style={styles.wrapper}>
         <Header text="Research" color="#ff2d55" />
         <ScrollView style={styles.scrollView} contentInset={{bottom: 150}}>
-          <CategoryTitle text="On going research" />
+          <CategoryTitle text="Ongoing research" />
+          { activeTrials.length === 0 && isLoading && <ActivityIndicator size="large" color="#4a4a4a" /> }
           { activeTrials.map((trial) => <TrialListItem onPress={this.navigateToItem.bind(this, trial.title)} key={trial.id} {...trial} />) }
+          { activeTrials.length === 0 && !isLoading && <Text style={{color: '#4a4a4a', paddingLeft: 20}}>There are no active trials at the moment</Text> }
           <CategoryTitle text="Open enrollment" />
           { openTrials.map((trial) => <TrialListItem onPress={this.navigateToItem.bind(this, trial.title)} key={trial.id} {...trial} />) }
+          { openTrials.length === 0 && isLoading && <ActivityIndicator size="large" color="#4a4a4a" /> }
           <CategoryTitle text="Research elegibility" />
           { elegibleTrials.map((trial, index) => <TrialListToggle onValueChange={this.changeItemValue.bind(this, trial)} key={`${trial.id}-${trial-index}`} {...trial} value={trial.elegible} />) }
+          { elegibleTrials.length === 0 && isLoading && <ActivityIndicator size="large" color="#4a4a4a" /> }
         </ScrollView>
       </View>
     );

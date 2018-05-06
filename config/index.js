@@ -1,3 +1,3 @@
 export default {
-  httpProvider: 'http://ed6de3d5.ngrok.io'
+  httpProvider: 'http://555e2ede.ngrok.io'
 }
