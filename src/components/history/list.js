@@ -16,6 +16,7 @@ import Header from '../header';
 const MedicalPrescriptionIcon = require('../../assets/medical-prescription.png');
 const MedicalAppointmentIcon = require('../../assets/medical-appointment.png');
 const VaccinationIcon = require('../../assets/medical-vaccination.png');
+const WearableIcon = require('../../assets/wearable.png');
 
 export default class History extends Component {
   state = {
@@ -24,6 +25,7 @@ export default class History extends Component {
       { label: 'Medical appointment', icon: MedicalPrescriptionIcon, subtitle: 'General medical examination', date: new Date(2018, 4, 5) },
       { label: 'Vacination', icon: VaccinationIcon, subtitle: 'Flu shot', date: new Date(2018, 3, 29) },
       { label: 'Medical appointment', icon: MedicalAppointmentIcon, subtitle: 'General medical examination', date: new Date(2018, 3, 29) },
+      { label: 'Wearable', icon: WearableIcon, subtitle: 'Ran 5km', date: new Date(2018, 3, 29) },
       { label: 'Vacination', icon: VaccinationIcon, subtitle: 'Flu shot', date: new Date(2018, 3, 12) },
     ]
   }
