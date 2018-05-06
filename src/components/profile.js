@@ -8,6 +8,7 @@ import {
   TextInput,
   Modal
 } from 'react-native';
+import Header from './header';
 
 export default class Profile extends Component {
   state = {
@@ -18,16 +19,17 @@ export default class Profile extends Component {
       gender: 'Male'
     },
     stats: [
-      { type: 'location', value: 'Portugal', uri: require(`../assets/location.png`), toUpdate: true },
       { type: 'height', value: '1,68 m', uri: require(`../assets/height.png`), toUpdate: true },
       { type: 'weight', value: '70 Kg', uri: require(`../assets/weight.png`), toUpdate: true },
-      { type: 'blood-type', value: 'A+', uri: require(`../assets/blood-type.png`), toUpdate: false }
+      { type: 'blood-type', value: 'A+', uri: require(`../assets/blood-type.png`), toUpdate: false },
+      { type: 'location', value: 'Portugal', uri: require(`../assets/location.png`), toUpdate: true }
     ]
   };
 
   render() {
     return (
       <View style={styles.wrapper}>
+        <Header text="Profile" color="#5856d6" />
         <View style={styles.basicInfoWrapper}>
           <View style={styles.basicInfoProfilePhoto}>
             <Image style={{ width: 120, height: 120 }} source={{ uri: this.state.basicInfo.profilePhoto }} />
@@ -60,7 +62,7 @@ const Stat = ({ type, value, uri, toUpdate }) => {
   return (
     <View style={styles.statWrapper}>
       <Image style={styles.statIcon} source={uri} />
-      <View>
+      <View style={styles.statTextWrapper}>
         <Text style={styles.statsTitle}>{type.toUpperCase()}</Text>
         <Text style={styles.statsSubtitle}>{value}</Text>
       </View>
@@ -75,18 +77,19 @@ const styles = StyleSheet.create({
     alignItems: 'flex-start',
     flexWrap: 'wrap',
     flexDirection: 'row',
-    backgroundColor: '#5856d6',
-    padding: 20
+    backgroundColor: '#5856d67f',
+    paddingHorizontal: 40,
+    paddingVertical: 20,
   },
   basicInfoTitle: {
-    fontSize: 24,
+    fontSize: 20,
     fontWeight: 'bold',
     marginBottom: 10,
     marginTop: 10,
     color: 'white'
   },
   basicInfoSubtitle: {
-    fontSize: 15,
+    fontSize: 16,
     marginBottom: 5,
     color: 'white'
   },
@@ -94,7 +97,9 @@ const styles = StyleSheet.create({
     width: 120,
     height: 120,
     borderRadius: 100,
-    overflow: 'hidden'
+    overflow: 'hidden',
+    borderWidth: 2,
+    borderColor: 'white'
   },
 
   // Stats
@@ -104,6 +109,8 @@ const styles = StyleSheet.create({
   statWrapper: {
     flexDirection: 'row',
     alignItems: 'center'
+  },
+  statTextWrapper: {
   },
   statsTitle: {
     fontSize: 10,
@@ -141,8 +148,6 @@ const styles = StyleSheet.create({
 
   // Global
   wrapper: {
-    marginTop: 32,
     flexGrow: 1,
-    margin: 5
   }
 });

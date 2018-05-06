@@ -24,7 +24,11 @@ const styles = StyleSheet.create({
   },
   text: {
     backgroundColor: 'transparent',
-    fontSize: 24,
-    fontWeight: '500'
+    color: '#4a4a4a',
+    paddingVertical: 4,
+    fontSize: 16,
+    fontWeight: 'bold',
+    paddingHorizontal: 20,
+    paddingTop: 32
   }
 });

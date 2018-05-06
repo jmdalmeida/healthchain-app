@@ -15,7 +15,7 @@ export default class TrialListItem extends Component {
 
     return (
       <TouchableOpacity style={styles.container} onPress={onValueChange}>
-        <Switch value={this.props.value} onValueChange={onValueChange} />
+        <Switch style={styles.switch} value={this.props.value} onValueChange={onValueChange} />
         <View style={styles.textContainer}>
           <Text style={styles.text}>{title}</Text>
           <Text style={styles.text}>{subtitle}</Text>
@@ -36,16 +36,20 @@ const Photo = ({ source }) => {
 
 const styles = StyleSheet.create({
   container: {
-    height: 64,
     borderColor: '#ccc',
     borderRadius: 4,
     marginBottom: 8,
-    padding: 4,
-    flexDirection: 'row'
+    paddingHorizontal: 20,
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  switch: {
+    height: 24,
+    width: 48
   },
   textContainer: {
-    width: '50%',
-    marginLeft: 8
+    flex: 1,
+    marginLeft: 16
   },
   photo: {
     borderRadius: 100,
@@ -54,6 +58,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'blue'
   },
   text: {
-    backgroundColor: 'transparent'
+    backgroundColor: 'transparent',
+    color: '#4a4a4a'
   }
 });
