@@ -35,7 +35,7 @@ export default class BottomBar extends Component {
 
 const BottomBarItem = ({ isActive, icons, title, onPress, color }) => {
   return (
-    <TouchableOpacity style={[styles.item, isActive ? styles.activeItem : {}]} onPress={onPress}>
+    <TouchableOpacity activeOpacity={1} style={[styles.item, isActive ? styles.activeItem : {}]} onPress={onPress}>
       <Image source={isActive ? icons.active : icons.default } style={styles.iconImage}/>
       <Text style={[styles.text, isActive ? { color } : {}]}>{title}</Text>
     </TouchableOpacity>
