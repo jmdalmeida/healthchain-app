@@ -9,6 +9,7 @@ import {
   Modal
 } from 'react-native';
 import Header from './header';
+import Stat from './stat';
 
 export default class Profile extends Component {
   state = {
@@ -19,10 +20,10 @@ export default class Profile extends Component {
       gender: 'Male'
     },
     stats: [
-      { type: 'height', value: '1,68 m', uri: require(`../assets/height.png`), toUpdate: true },
-      { type: 'weight', value: '70 Kg', uri: require(`../assets/weight.png`), toUpdate: true },
-      { type: 'blood-type', value: 'A+', uri: require(`../assets/blood-type.png`), toUpdate: false },
-      { type: 'location', value: 'Portugal', uri: require(`../assets/location.png`), toUpdate: true }
+      { type: 'height', value: '1,68 m', uri: require(`../assets/height.png`), showButton: true, Button: UpdateButton },
+      { type: 'weight', value: '70 Kg', uri: require(`../assets/weight.png`), showButton: true, Button: UpdateButton },
+      { type: 'blood-type', value: 'A+', uri: require(`../assets/blood-type.png`), showButton: false },
+      { type: 'location', value: 'Portugal', uri: require(`../assets/location.png`), showButton: true, Button: UpdateButton }
     ]
   };
 
@@ -54,19 +55,6 @@ const UpdateButton = () => {
       <TouchableOpacity style={styles.updateButton} onPress={() => {}}>
         <Text style={styles.updateButtonText}>Update</Text>
       </TouchableOpacity>
-    </View>
-  )
-}
-
-const Stat = ({ type, value, uri, toUpdate }) => {
-  return (
-    <View style={styles.statWrapper}>
-      <Image style={styles.statIcon} source={uri} />
-      <View style={styles.statTextWrapper}>
-        <Text style={styles.statsTitle}>{type.toUpperCase()}</Text>
-        <Text style={styles.statsSubtitle}>{value}</Text>
-      </View>
-      {toUpdate && <UpdateButton/>}
     </View>
   )
 }

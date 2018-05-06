@@ -4,24 +4,27 @@ import Profile from './src/components/profile';
 import Trials from './src/components/trials/list';
 import BottomBar from './src/components/bottom-bar';
 import History from './src/components/history/list';
+import Insurance from './src/components/insurance';
 import TrialDetail from './src/components/trials/detail';
 import HistoryDetail from './src/components/history/detail';
 
 const ProfileIcon = require('./src/assets/id-picture.png');
 const HistoryIcon = require('./src/assets/history.png');
 const TrialsIcon = require('./src/assets/trials.png');
+const InsuranceIcon = require('./src/assets/insurance.png');
 
 const BottomBarItems =  [
   { title: 'Research', icon: TrialsIcon, component: Trials, route: 'trials' },
   { title: 'History', icon: HistoryIcon, component: History, route: 'history' },
   { title: 'Profile', icon: ProfileIcon, component: Profile, route: 'profile' },
-  { title: 'Trial Detail', hide: true, icon: ProfileIcon, component: TrialDetail, route: 'trial-detail' },
-  { title: 'History Detail', hide: true, icon: ProfileIcon, component: HistoryDetail, route: 'history-detail' }
+  { title: 'Insurance', hide: true, icon: ProfileIcon, component: HistoryDetail, route: 'history-detail' },
+  { title: 'Trial Detail', hide: true, icon: InsuranceIcon, component: Insurance, route: 'insurance' },
+  { title: 'History Detail', hide: true, icon: ProfileIcon, component: HistoryDetail, route: 'history-detail' },
 ]
 
 export default class mobile extends Component {
   state = {
-    activeRoute: 'trials'
+    activeRoute: 'insurance'
   }
 
   onPress(route) {
