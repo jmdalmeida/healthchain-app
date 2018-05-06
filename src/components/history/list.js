@@ -48,12 +48,12 @@ export default class History extends Component {
   }
 
   onHistoryItemPress({ title }) {
-    console.log(...arguments)
-    this.props.navigator.push({
-      title,
-      component: HistoryDetail,
-      route: 'history-detail'
-    })
+    // console.log(...arguments)
+    // this.props.navigator.push({
+    //   title,
+    //   component: HistoryDetail,
+    //   route: 'history-detail'
+    // })
   }
 
   render() {

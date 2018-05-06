@@ -20,7 +20,8 @@ export default class Header extends Component {
 const styles = StyleSheet.create({
   wrapper: {
     padding: 40,
-    paddingBottom: 24
+    paddingBottom: 24,
+    paddingTop: 80
   },
   text: {
     color: 'white',

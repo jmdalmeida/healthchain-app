@@ -3,6 +3,7 @@ import {
   StyleSheet,
   Text,
   TouchableOpacity,
+  ActivityIndicator,
   View,
   ScrollView,
   NavigatorIOS,
@@ -12,29 +13,96 @@ import TrialListToggle from './list-toggle';
 import TrialDetail from './detail';
 import CategoryTitle from '../category-title';
 import Header from '../header';
+const {promisify} = require("es6-promisify");
+
+import { registry, trial } from '../../util/contract';
+import { web3, getTrial, getRegistry, getAccounts } from '../../util/ethereum';
 
 const MedicalPrescriptionIcon = require('../../assets/medical-prescription.png');
 const MedicalAppointmentIcon = require('../../assets/medical-appointment.png');
 const VaccinationIcon = require('../../assets/medical-vaccination.png');
 
-let trials = [
-  { label: 'medical trial', icon: MedicalPrescriptionIcon, subtitle: 'New flu shot', id: 1, active: true },
-  { label: 'medical trial', icon: VaccinationIcon, subtitle: 'Hepatitis A new treatment', id: 2, open: true },
-  { label: 'Flu', photo: 'aa', subtitle: 'sub', id: 4, elegible: true },
-  { label: 'Flu', photo: 'aa', subtitle: 'sub', id: 5, elegible: true },
-]
-
 export default class Trials extends Component {
   state = {
-    trials
+    trials: [],
+    myTrials: [],
+    isLoading: true,
+    elegibleTrials: [
+      {
+        open: false,
+        description: 'Asthma',
+        id: 10,
+        elegible: true
+      },
+      {
+        open: false,
+        description: 'Common cold',
+        id: 11
+      },
+      {
+        open: false,
+        description: 'Diabetes',
+        id: 12,
+        elegible: true
+      }
+    ]
+  }
+
+  async componentDidMount() {
+    let [account] = await getAccounts();
+    let contract = await getRegistry();
+    let trialsCount = await contract.getTrialsCount((_, count) => {
+      this.setState({ trialsCount: count.toNumber() }, () => this.getTrials());
+    });
+
+    this.setState({ contract, account });
+  }
+
+  async getTrials() {
+    let { trialsCount, contract, myTrials, account } = this.state;
+    this.setState({ isLoading: true });
+
+    for (let i = 0; i < trialsCount; i++) {
+      contract.getTrial(i, (_, address) => {
+        let contract = getTrial(address)
+        this.setState(
+          { myTrials: myTrials.concat(contract) }, 
+          () => this.formatContracts(i)
+        )
+      })
+    }
+  }
+
+  async formatContracts(index) {   
+    let trials = this.state.myTrials.map(async (contract) => {
+      let isOngoingPromised = promisify(contract.isOngoing)
+      let getNamePromised = promisify(contract.getName)
+      let getDescriptionPromised = promisify(contract.getDescription)
+
+      return Promise.all([isOngoingPromised(), getNamePromised(), getDescriptionPromised(), Promise.resolve(index)])
+    });
+
+    
+    let allTrials = await trials;
+    let trialsData = allTrials.map(async (singleTrial) => {
+      let [isOngoing, label, description, id] = await singleTrial;
+
+      return { open: isOngoing, label, description, id };
+    });
+
+    Promise.all(trialsData)
+      .then((trials) => {
+        let onGoingTrials = trials.filter(trial => trial.open);
+        this.setState({ isLoading: false, trials: this.state.trials.concat(onGoingTrials) })
+      })
   }
 
   navigateToItem(title) {
-    this.props.navigator.push({
-      title,
-      component: TrialDetail,
-      route: 'trial-detail'
-    })
+    // this.props.navigator.push({
+    //   title,
+    //   component: TrialDetail,
+    //   route: 'trial-detail'
+    // })
   }
 
   changeItemValue(updatedTrial) {
@@ -52,20 +120,25 @@ export default class Trials extends Component {
   }
 
   render() {
+    let { isLoading } = this.state;
     let activeTrials = this.state.trials.filter(trial => trial.active);
     let openTrials = this.state.trials.filter(trial => trial.open);
-    let elegibleTrials = this.state.trials;
+    let elegibleTrials = this.state.elegibleTrials;
 
     return (
       <View style={styles.wrapper}>
         <Header text="Research" color="#ff2d55" />
         <ScrollView style={styles.scrollView} contentInset={{bottom: 150}}>
-          <CategoryTitle text="On going research" />
+          <CategoryTitle text="Ongoing research" />
+          { activeTrials.length === 0 && isLoading && <ActivityIndicator size="large" color="#4a4a4a" /> }
           { activeTrials.map((trial) => <TrialListItem onPress={this.navigateToItem.bind(this, trial.title)} key={trial.id} {...trial} />) }
+          { activeTrials.length === 0 && !isLoading && <Text style={{color: '#4a4a4a', paddingLeft: 20}}>There are no active trials at the moment</Text> }
           <CategoryTitle text="Open enrollment" />
           { openTrials.map((trial) => <TrialListItem onPress={this.navigateToItem.bind(this, trial.title)} key={trial.id} {...trial} />) }
+          { openTrials.length === 0 && isLoading && <ActivityIndicator size="large" color="#4a4a4a" /> }
           <CategoryTitle text="Research elegibility" />
           { elegibleTrials.map((trial, index) => <TrialListToggle onValueChange={this.changeItemValue.bind(this, trial)} key={`${trial.id}-${trial-index}`} {...trial} value={trial.elegible} />) }
+          { elegibleTrials.length === 0 && isLoading && <ActivityIndicator size="large" color="#4a4a4a" /> }
         </ScrollView>
       </View>
     );

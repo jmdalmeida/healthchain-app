@@ -8,13 +8,17 @@ import {
   NavigatorIOS,
 } from 'react-native';
 
+const icons = []
+
+const Icon = require('../../assets/medical-vaccination.png');
+
 export default class TrialListItem extends Component {
   render() {
     const { style: customStyles, icon, label = '', subtitle, photo, description, onPress = () => {} } = this.props;
 
     return (
       <TouchableOpacity style={styles.container} onPress={onPress}>
-        <Photo source={icon} style={customStyles}/>
+        <Photo source={Icon} style={customStyles}/>
         <View style={styles.textContainer}>
           <Text style={styles.label}>{label.toUpperCase()}</Text>
           {subtitle && <Text style={styles.text}>{subtitle}</Text>}

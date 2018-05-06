@@ -11,14 +11,13 @@ import {
 
 export default class TrialListItem extends Component {
   render() {
-    const { title, subtitle, photo, description, onValueChange, onPress = () => {} } = this.props;
+    const { label, subtitle, photo, description, onValueChange, onPress = () => {} } = this.props;
 
     return (
       <TouchableOpacity style={styles.container} onPress={onValueChange}>
         <Switch style={styles.switch} value={this.props.value} onValueChange={onValueChange} />
         <View style={styles.textContainer}>
-          <Text style={styles.text}>{title}</Text>
-          <Text style={styles.text}>{subtitle}</Text>
+          <Text style={styles.text}>{label}</Text>
           <Text style={styles.description}>{description}</Text>
         </View>
       </TouchableOpacity>

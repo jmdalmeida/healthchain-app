@@ -50,6 +50,8 @@ const BottomBarItems =  [
   }
 ]
 
+global.__DEV__ = false
+
 export default class mobile extends Component {
   state = {
     activeRoute: 'research'
