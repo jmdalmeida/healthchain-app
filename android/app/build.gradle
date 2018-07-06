@@ -93,6 +93,15 @@ android {
     compileSdkVersion 23
     buildToolsVersion "23.0.1"
 
+    signingConfigs { 
+      release { 
+          storeFile file('my-release-key.keystore') 
+          storePassword 'uniplaces2016' 
+          keyAlias 'my-key-alias' 
+          keyPassword 'uniplaces2016' 
+      } 
+    }
+
     defaultConfig {
         applicationId "com.mobile"
         minSdkVersion 16
