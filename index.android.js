@@ -1,65 +1,90 @@
+import 'es6-symbol/implement';
 import React, { Component } from 'react';
-import {
-  AppRegistry,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View
-} from 'react-native';
+import { View, AppRegistry } from 'react-native';
+import Profile from './src/components/profile';
+import Research from './src/components/research/list';
+import BottomBar from './src/components/bottom-bar';
+import History from './src/components/history/list';
+import Colors from './src/enums/colors';
+import Insurance from './src/components/insurance';
 
-const Web3 = require('web3');
-const web3 = new Web3();
-web3.setProvider(new web3.providers.HttpProvider('http://localhost:8545'));
+const BottomBarItems =  [
+  {
+    title: 'Research',
+    icons: {
+      default: require('./src/assets/research.png'),
+      active: require('./src/assets/research-active.png')
+    },
+    component: Research,
+    route: 'research',
+    color: Colors.RESEARCH
+  },
+  { 
+    title: 'History',
+    icons: {
+      default: require('./src/assets/history.png'),
+      active: require('./src/assets/history-active.png')
+    },
+    component: History,
+    route: 'history',
+    color: Colors.HISTORY 
+  },
+  { 
+    title: 'Insurance',
+    icons: {
+      default: require('./src/assets/insurance.png'),
+      active: require('./src/assets/insurance-active.png')
+    }, 
+    component: Insurance,
+    route: 'insurance',
+    color: Colors.INSURANCE
+  },
+  { 
+    title: 'Profile', 
+    icons: {
+      default: require('./src/assets/profile.png'),
+      active: require('./src/assets/profile-active.png')
+    }, 
+    component: Profile,
+    route: 'profile',
+    color: Colors.PROFILE
+  }
+]
+
+global.__DEV__ = false
 
 export default class mobile extends Component {
   state = {
-    balance: null
-  };
-
-  getBalance() {
-    web3.eth.getCoinbase((err, coinbase) => {
-      const balance = web3.eth.getBalance(coinbase, (err2, balance) => {
-        console.log('balance ' + balance);
-        this.setState({balance});
-      });
-    });
+    activeRoute: 'research'
   }
 
-  render () {
+  onPress(route) {
+    this.setState({ activeRoute: route.route })
+  }
+
+  renderRoute() {
+    let Route = BottomBarItems.filter((item) => {
+      return item.route === this.state.activeRoute;
+    })[0];
+
+    const push = ({ route }) => {
+      this.setState({ activeRoute: route })
+    }
+
+    const replace = ({ route }) => {
+      this.setState({ activeRoute: route })
+    }
+
+    return <Route.component navigator={{push, replace}} />
+  }
+
+  render() {
     return (
-      <View style={styles.container}>
-        <TouchableOpacity style={styles.balanceButton} onPress={this.getBalance.bind(this)}>
-          <Text style={styles.balanceText}>Get Balance</Text>
-        </TouchableOpacity>
-        {this.state.balance && <Text style={styles.balance}>
-          {`${this.state.balance}`}
-        </Text>}
+      <View style={{flex: 1}}>
+        {this.renderRoute(this.state.activeState)}
+        <BottomBar items={BottomBarItems.filter(item => !item.hide)} activeItem={this.state.activeRoute} onItemPress={this.onPress.bind(this)}/>
       </View>
     );
-  }
-}
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#F5FCFF',
-  },
-  balanceButton: {
-    backgroundColor: '#0dab7f',
-    padding: 10,
-    width: 200,
-    margin: 20,
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderRadius: 5
-  },
-  balanceText: {
-    textAlign: 'center',
-    color: 'white',
-    fontSize: 16
-  },
-});
+  }}
 
 AppRegistry.registerComponent('mobile', () => mobile);

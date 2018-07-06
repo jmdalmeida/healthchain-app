@@ -3,8 +3,11 @@ import {
   StyleSheet,
   Text,
   TouchableOpacity,
+  TouchableHighlight,
   ActivityIndicator,
   View,
+  Alert,
+  Platform,
   ScrollView,
   NavigatorIOS,
 } from 'react-native';
@@ -26,6 +29,7 @@ export default class Trials extends Component {
   state = {
     trials: [],
     myTrials: [],
+    activeTrials: [],
     isLoading: true,
     elegibleTrials: [
       {
@@ -107,6 +111,28 @@ export default class Trials extends Component {
 
   changeItemValue(updatedTrial) {
     updatedTrial.elegible = !updatedTrial.elegible;
+    let isIos = Platform.OS === 'ios';
+
+    setTimeout(() => {
+      Alert.alert(
+        'New trial available!',
+        `${updatedTrial.description} - New drug`,
+        [
+          {
+            text: 'See more',
+            onPress: () => console.log('Cancel Pressed'),
+            // style: 'cancel',
+          },
+          {
+            text: 'Enrol',
+            onPress: () => {
+              let coldTrial = { ...updatedTrial, label: 'New drug' };
+              this.setState({ activeTrials: [coldTrial] })
+            },
+          },
+        ]
+      );
+    }, 2000);
 
     let trials = this.state.trials.reduce((acc, trial) => {
       if (trial.id === updatedTrial.id) {
@@ -121,7 +147,7 @@ export default class Trials extends Component {
 
   render() {
     let { isLoading } = this.state;
-    let activeTrials = this.state.trials.filter(trial => trial.active);
+    let { activeTrials } = this.state;
     let openTrials = this.state.trials.filter(trial => trial.open);
     let elegibleTrials = this.state.elegibleTrials;
 
@@ -153,7 +179,8 @@ const styles = StyleSheet.create({
   scrollView: {
     paddingHorizontal: 20,
     paddingTop: 16,
-    paddingBottom: 56
+    paddingBottom: 56,
+    flex: 1
   },
   pageTitle: {
     fontSize: 24
